@@ -14,7 +14,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-only')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # Host configuration
 ALLOWED_HOSTS = []
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')

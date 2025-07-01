@@ -5,7 +5,7 @@ services:
     buildCommand: |
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
-    startCommand: gunicorn astrogpt.wsgi:application
+    startCommand: gunicorn astrogpt.wsgi:application  # Changed from app:app
     envVars:
       - key: SECRET_KEY
         generateValue: true
@@ -13,6 +13,4 @@ services:
         value: "False"
       - key: GEMINI_API_KEY
         sync: false
-      - key: DISABLE_COLLECTSTATIC
-        value: "0"
     plan: free
