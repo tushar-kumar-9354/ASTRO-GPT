@@ -584,38 +584,36 @@
       </div>
     </div>
     
-    <div id="planet-info">
-      <h2 id="info-title"><i class="fas fa-globe"></i> Planet Name</h2>
-      <div class="info-row">
-        <div class="info-label">Diameter:</div>
-        <div class="info-value" id="info-diameter">-</div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Mass:</div>
-        <div class="info-value" id="info-mass">-</div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Orbital Period:</div>
-        <div class="info-value" id="info-period">-</div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Moons:</div>
-        <div class="info-value" id="info-moons">-</div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">Temperature:</div>
-        <div class="info-value" id="info-temp">-</div>
-      </div>
-      <button id="facts-button" onclick="fetchPlanetFacts()"><i class="fas fa-star"></i> Get Interesting Facts</button>
-      <div id="planet-facts"></div>
-    </div>
-    
-    <div id="zoom-controls">
-      <button onclick="zoomIn()"><i class="fas fa-search-plus"></i></button>
-      <button onclick="zoomOut()"><i class="fas fa-search-minus"></i></button>
-    </div>
+<div id="planet-info">
+  <h2 id="info-title"><i class="fas fa-globe"></i> Planet Name</h2>
+  <div class="info-row">
+    <div class="info-label">Diameter:</div>
+    <div class="info-value" id="info-diameter">-</div>
   </div>
-  
+  <div class="info-row">
+    <div class="info-label">Mass:</div>
+    <div class="info-value" id="info-mass">-</div>
+  </div>
+  <div class="info-row">
+    <div class="info-label">Orbital Period:</div>
+    <div class="info-value" id="info-period">-</div>
+  </div>
+  <div class="info-row">
+    <div class="info-label">Moons:</div>
+    <div class="info-value" id="info-moons">-</div>
+  </div>
+  <div class="info-row">
+    <div class="info-label">Temperature:</div>
+    <div class="info-value" id="info-temp">-</div>
+  </div>
+  <button id="facts-button" onclick="fetchPlanetFacts(event)"><i class="fas fa-star"></i> Get Interesting Facts</button>
+  <div id="planet-facts"></div>
+</div>
+
+<div id="zoom-controls">
+  <button onclick="zoomIn()"><i class="fas fa-search-plus"></i></button>
+  <button onclick="zoomOut()"><i class="fas fa-search-minus"></i></button>
+</div>
   <div id="tooltip"></div>
   
   <div id="loading">
@@ -1239,76 +1237,96 @@
       });
     }
     
-    function fetchPlanetFacts() {
-      if (!currentPlanet) return;
-      
-      factsButton.disabled = true;
-      factsButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-      factsButton.classList.add('loading');
-      
-      planetFacts.innerHTML = '<div class="fact-item"><i class="fas fa-satellite"></i> Searching the cosmos for interesting facts...</div>';
-      planetFacts.style.display = 'block';
+    function fetchPlanetFacts(event) {
+  // Prevent the click event from bubbling up to document
+  if (event) {
+    event.stopPropagation();
+  }
 
-      const prompt = `Provide 3 interesting facts about ${currentPlanet.name}. 
-                    Format each fact as: 
-                    • [Fact 1]
-                    • [Fact 2]
-                    • [Fact 3]
-                    Keep each fact to 1-2 sentences. Focus on unique characteristics.`;
+  if (!currentPlanet) return;
+  
+  factsButton.disabled = true;
+  factsButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+  factsButton.classList.add('loading');
+  
+  planetFacts.innerHTML = '<div class="fact-item"><i class="fas fa-satellite"></i> Searching the cosmos for interesting facts...</div>';
+  planetFacts.style.display = 'block';
 
-      fetch('/ask/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({
-          question: prompt
-        })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.answer) {
-          let facts = data.answer.split('\n')
-            .map(line => line.trim())
-            .filter(line => line.startsWith('•') || line.startsWith('-'));
-          
-          if (facts.length === 0) {
-            facts = data.answer.split('\n\n')
-              .map(fact => fact.trim())
-              .filter(fact => fact.length > 0);
-          }
-          
-          if (facts.length > 0) {
-            planetFacts.innerHTML = facts.map(fact => 
-              `<div class="fact-item"><i class="fas fa-star"></i> ${fact.replace(/^[•-]\s*/, '').trim()}</div>`
-            ).join('');
-          } else {
-            planetFacts.innerHTML = `
-              <div class="fact-item"><i class="fas fa-robot"></i> ${data.answer}</div>
-            `;
-          }
-        } else {
-          planetFacts.innerHTML = '<div class="fact-item"><i class="fas fa-exclamation-triangle"></i> No facts received from server</div>';
-        }
-      })
-      .catch(error => {
+  const prompt = `Provide 3 interesting facts about ${currentPlanet.name}. 
+                Format each fact as: 
+                • [Fact 1]
+                • [Fact 2]
+                • [Fact 3]
+                Keep each fact to 1-2 sentences. Focus on unique characteristics.`;
+
+  fetch('/ask/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({
+      question: prompt
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.answer) {
+      let facts = data.answer.split('\n')
+        .map(line => line.trim())
+        .filter(line => line.startsWith('•') || line.startsWith('-'));
+      
+      if (facts.length === 0) {
+        facts = data.answer.split('\n\n')
+          .map(fact => fact.trim())
+          .filter(fact => fact.length > 0);
+      }
+      
+      if (facts.length > 0) {
+        planetFacts.innerHTML = facts.map(fact => 
+          `<div class="fact-item"><i class="fas fa-star"></i> ${fact.replace(/^[•-]\s*/, '').trim()}</div>`
+        ).join('');
+      } else {
         planetFacts.innerHTML = `
-          <div class="fact-item"><i class="fas fa-exclamation-triangle"></i> Error: ${error.message}</div>
+          <div class="fact-item"><i class="fas fa-robot"></i> ${data.answer}</div>
         `;
-      })
-      .finally(() => {
-        factsButton.disabled = false;
-        factsButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Facts';
-        factsButton.classList.remove('loading');
-      });
+      }
+    } else {
+      planetFacts.innerHTML = '<div class="fact-item"><i class="fas fa-exclamation-triangle"></i> No facts received from server</div>';
     }
+  })
+  .catch(error => {
+    planetFacts.innerHTML = `
+      <div class="fact-item"><i class="fas fa-exclamation-triangle"></i> Error: ${error.message}</div>
+    `;
+  })
+  .finally(() => {
+    factsButton.disabled = false;
+    factsButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Facts';
+    factsButton.classList.remove('loading');
+  });
+}
+
+// Update the hidePlanetInfo function to exclude clicks on the panel
+function hidePlanetInfo(event) {
+  // Only hide if not clicking on the planet info panel or its children
+  if (!event.target.closest('#planet-info')) {
+    planetInfoPanel.style.display = 'none';
+    currentPlanet = null;
     
-    function askAI() {
-      const question = questionInput.value.trim();
-      if (!question) {
-        showNotification('Please enter a question', 'warning');
-        return;
+    // Remove highlight from all planets
+    planets.forEach(p => {
+      p.object.material.emissive.setHex(0x000000);
+      p.object.material.emissiveIntensity = 0;
+    });
+  }
+}
+
+function askAI() {
+  const question = questionInput.value.trim();
+  if (!question) {
+    showNotification('Please enter a question', 'warning');
+    return;
       }
       
       answerBox.innerHTML = '<div class="fact-item"><i class="fas fa-satellite fa-spin"></i> Contacting Gemini AI...</div>';

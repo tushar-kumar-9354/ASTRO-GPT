@@ -7,7 +7,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import os
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', 'AIzaSyBegFihxe47BeSumPIh4Qa_6UWl_VT69VQ')
+from dotenv import load_dotenv
+load_dotenv()
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
 @csrf_exempt
 def ask_ai(request):
