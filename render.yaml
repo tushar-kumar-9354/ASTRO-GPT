@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: astrogpt-web
+    runtime: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn astrogpt.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DISABLE_COLLECTSTATIC
+        value: "0"
+    plan: free
