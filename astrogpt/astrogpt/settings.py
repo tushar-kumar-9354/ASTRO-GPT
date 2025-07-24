@@ -15,8 +15,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-only')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 import sys
 
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'astro-gpt-1.onrender.com', 'astro-gpt-2.onrender.com']
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost','Astro-GPT-1.onrender.com']
 
 # For production, use specific domains
 
