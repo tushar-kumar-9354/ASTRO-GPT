@@ -60,6 +60,7 @@ TEMPLATES = [
 ]
 CSRF_TRUSTED_ORIGINS = [
     'https://astro-gpt-2.onrender.com',
+    
 ]
 
 
@@ -140,7 +141,7 @@ if not DEBUG:
     # Required for Render which uses HTTPS termination at proxy
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-    SECURE_SSL_REDIRECT = True  # Force HTTPS only when behind proxy
+    SECURE_SSL_REDIRECT = False  # Force HTTPS only when behind proxy
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
 
