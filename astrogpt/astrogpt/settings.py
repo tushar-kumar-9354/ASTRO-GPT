@@ -59,10 +59,10 @@ TEMPLATES = [
         },
     },
 ]
-
 CSRF_TRUSTED_ORIGINS = [
-    'https://Astro-GPT-1.onrender.com',
+    'https://astro-gpt-2.onrender.com',
 ]
+
 
 WSGI_APPLICATION = 'astrogpt.wsgi.application'
 
