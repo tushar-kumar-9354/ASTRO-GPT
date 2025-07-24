@@ -4,7 +4,6 @@ Django settings for astrogpt project.
 
 from pathlib import Path
 import os
-import sys
 import dj_database_url
 from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -130,6 +129,22 @@ if not DEBUG:
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-GEMINI_API_KEY = config('GEMINI_API_KEY')
+
+GEMINI_API_KEY='AIzaSyByxCu6P-L3oSbsB_IH0SANNa77s-E9iLc'
 # GEMINI_API_KEY='AIzaSyByxCu6P-L3oSbsB_IH0SANNa77s-E9iLc'
 SECRET_KEY= config('SECRET_KEY')
+# Security settings
+if not DEBUG:
+    # Use these in production only
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Important for platforms like Render
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+else:
+    # Use these in local development
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
