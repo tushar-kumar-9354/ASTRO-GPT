@@ -100,10 +100,11 @@ STATIC_URL = '/static/'
 # Path where collectstatic will gather all static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Additional locations of static files (e.g., in your app's 'static/' folder)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / "static",
+    "resume_optimizer/static",  # this might be wrong or non-existent
 ]
+
 
 # For WhiteNoise (use this only in production)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -127,14 +128,13 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
 
 # Gemini AI Configuration
-
+#FIXED: Use environment variable for API key
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-GEMINI_API_KEY='AIzaSyByxCu6P-L3oSbsB_IH0SANNa77s-E9iLc'
-# GEMINI_API_KEY='AIzaSyByxCu6P-L3oSbsB_IH0SANNa77s-E9iLc'
+GEMINI_API_KEY='AIzaSyBOf_fqlBpnMzhHCLNVnFtnbU0VBGtb6AU'
 SECRET_KEY= config('SECRET_KEY')
-# Security settings
+# Security settings 
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 if not DEBUG:

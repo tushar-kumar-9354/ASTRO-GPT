@@ -21,7 +21,7 @@ def ask_ai(request):
     try:
         # Get API key from environment
         
-        GEMINI_API_KEY='AIzaSyByxCu6P-L3oSbsB_IH0SANNa77s-E9iLc'
+        GEMINI_API_KEY='AIzaSyBOf_fqlBpnMzhHCLNVnFtnbU0VBGtb6AU'
         if not GEMINI_API_KEY:
             logger.error("GEMINI_API_KEY not configured")
             return JsonResponse({"answer": "Service configuration error"}, status=500)
